@@ -4,22 +4,24 @@ const {s3, S3_BUCKET} = require("../config/aws-config");
 
 
 async function  pullRepo(){
-    const repoPath = path.resolve(process.cwd(),'.mygit');
+    const repoPath = path.resolve(process.cwd(), ".myGit");
     const commitsPath = path.join(repoPath,"commits");
 
     try {
         const data = await s3
         .listObjectsV2({
             Bucket: S3_BUCKET,
-            Prefix: "commits/",
+            Prefix: ".myGit/commits/",
 
         })
         .promise();
 
         const objects = data.Contents;
 
+
+
         for(const object of objects){
-            const key = object.key;
+            const key = object.Key;
             const commitDir = path.join(
                 commitsPath,
                 path.dirname(key).split("/").pop()
@@ -33,9 +35,14 @@ async function  pullRepo(){
                 Key: key,
             };
         const fileContent = await s3.getObject(params).promise();
-        await fs.writeFile(path.join(repoPath, key), fileContent.Body);
+        const relativePath = key.replace(/^\.myGit[\\/]/, "");
+        const localPath = path.join(repoPath, relativePath);
 
-         console.log("All commits pulled from S3 successfully.");
+        await fs.mkdir(path.dirname(localPath), { recursive: true });
+        await fs.writeFile(localPath, fileContent.Body);
+
+
+        console.log("All commits pulled from S3 successfully.");
         } 
     } catch (error) {
         console.error("Error pulling repository from s3:", error);
