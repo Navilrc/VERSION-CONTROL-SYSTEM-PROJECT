@@ -4,6 +4,7 @@ const cors = require("cors"); //to allow cross origin requests
 const mongoose = require("mongoose");
 const bodyParser =require("body-parser");
 const http = require("http");
+const { Server } = require("socket.io");
 
 
 const yargs = require('yargs');
@@ -88,4 +89,41 @@ function startServer() {
         .connect(mongoURI)
         .then(() => console.log("Connected to MongoDB"))
         .catch((err) => console.error("Error connecting to MongoDB:", err));
+
+    app.use(cors({ origin: "*" })); // Allow requests from any origin
+
+    app.get("/", (req, res) => {
+        res.send("Welcome!");
+    });
+
+    let user = "test";
+    const  httpServer = http.createServer(app);
+    const io = new Server(httpServer, {
+        cors: {
+            origin: "*",
+            methods: ["GET", "POST"],
+        },
+    });
+
+     io.on("connection", (socket) => {
+       socket.on("joinRoom", (userId) => {
+            user = userId;
+            console.log("=====") 
+            console.log(user);
+            console.log("=====");
+            socket.join(userId);
+        });
+    });
+
+    const db = mongoose.connection;
+
+    db.once("open", async () => {
+        console.log("CRUD operations called");
+        // You can set up your CRUD routes here
+    });
+
+    httpServer.listen(port,() => {
+        console.log(`Server running on PORT ${port}`);
+    });
+    
 }
