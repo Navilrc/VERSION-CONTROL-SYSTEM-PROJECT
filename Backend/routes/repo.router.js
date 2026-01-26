@@ -14,9 +14,3 @@ repoRouter.patch("/repo/toggle/:id", repoController.toggleVisibilityById);
 repoRouter.delete("/repo/delete/:id", repoController.deleteRepositoryById);
 
 module.exports = repoRouter;
-userRouter.post("/login", userController.login);
-userRouter.get("/userprofile", userController.getUserProfile);
-userRouter.put("/updateprofile", userController.updateUserProfile);
-userRouter.delete("/deleteprofile", userController.deleteUserProfile);
-
-module.exports = userRouter;
