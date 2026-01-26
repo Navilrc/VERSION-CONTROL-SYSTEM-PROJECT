@@ -1,5 +1,7 @@
 # Version Control System Project
 
+Currently working on it
+
 A full-stack Git-like version control system built with Node.js and React. This project provides a modern interface for managing repositories, handling version control operations, and collaborating with other developers.
 
 ---
@@ -453,3 +455,4 @@ For issues and questions:
 **Last Updated**: January 2026
 
 **Version**: 1.0.0
+
