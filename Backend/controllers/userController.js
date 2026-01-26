@@ -81,4 +81,4 @@ module.exports = {
     getUserProfile,
     updateUserProfile,
     deleteUserProfile
-};
+}; 
