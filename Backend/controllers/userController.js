@@ -99,7 +99,21 @@ async function getALLUsers (req, res) {
     }  
 };
 async function getUserProfile (req, res) {
-    res.send("Get user profile");
+    const currentID = req.params.id;
+    try {
+        await connectClient();
+        const db = client.db("GitHubClone");
+        const usersCollection = db.collection("users");
+
+        const user = await usersCollection.findOne({ _id: new ObjectId(currentID) });
+        if(!user) {
+            return res.status(400).json({message: "User not found"});
+            res.json(user);
+        }
+    } catch (error) {
+        console.error("Error during fetching user profile:", error.message);
+        res.status(500).json("Server error!");
+    }
 };
 async function updateUserProfile (req, res) {
     res.send("Update user profile");
