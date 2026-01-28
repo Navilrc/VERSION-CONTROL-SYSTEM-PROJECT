@@ -108,8 +108,9 @@ async function getUserProfile (req, res) {
         const user = await usersCollection.findOne({ _id: new ObjectId(currentID) });
         if(!user) {
             return res.status(400).json({message: "User not found"});
-            res.json(user);
+           
         }
+        res.json(user);
     } catch (error) {
         console.error("Error during fetching user profile:", error.message);
         res.status(500).json("Server error!");
