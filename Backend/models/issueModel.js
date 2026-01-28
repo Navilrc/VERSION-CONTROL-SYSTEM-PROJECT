@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
-const { default: Repository } = require("./repoModel");
-const { schema } = mongoose;
+const { Schema } = mongoose;
 
-const IssueSchema = new schema({
+const IssueSchema = new Schema({
     title: {
         type: String,
         required: true,
@@ -17,10 +16,10 @@ const IssueSchema = new schema({
         default: "open",
     },
     Repository: {
-        type: schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "Repository",  
         required: true,
     },
 });
 const Issue = mongoose.model("Issue", IssueSchema);
-export default Issue;
+module.exports = Issue;
