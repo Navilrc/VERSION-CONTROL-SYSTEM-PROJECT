@@ -97,6 +97,20 @@ async function fetchRepositoryForCurrentUser (req, res) {
 async function updateRepositoryById (req, res) {
     const { id } = req.params;
     const { content, description } = req.body;
+    
+    try {
+        const repository = await Repository.findById(id);
+        if(!repository){
+            return res.status(404).json({ error: "Repository not found!" });
+        }
+        repository.content.push(content);
+        repository.description = description;
+        const updatedRepository = await repository.save();
+        res.json({ message: "Repository updated successfully!", repository: updatedRepository });
+    } catch (error) {
+        console.error("Error during repository update:", error.message);
+        res.status(500).json("Server error!");
+    }
 };
 
 async function toggleVisibilityById (req, res) {
