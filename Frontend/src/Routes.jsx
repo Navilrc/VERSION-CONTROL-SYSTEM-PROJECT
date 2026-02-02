@@ -18,11 +18,46 @@ const ProjectRoutes = () => {
 
     useEffect(() => {
         const userIdFromStorage = localStorage.getItem("userId");
-        if(!currentUser) navigate('/login')
-    }, [currentUser]);
 
+        if(userIdFromStorage && !currentUser){
+            setCurrentUser (userIdFromStorage);
 
+        }
+        if(!userIdFromStorage && !["/auth", "/signup"].includes(window.location.pathname))
+        {
+            navigate("/auth");
+        }
 
+        if(userIdFromStorage && window.location.pathname=='/auth'){
+            navigate("/");
 
-}    
+        }
+    }, [currentUser, navigate, setCurrentUser ]);
+
+        let element = useRoutes([
+           {
+            path: "/",
+            element: <Dashboard />
+           },
+           {
+            path: "/profile",
+            element: <Profile/>
+           },
+           {
+            path: "/signup",
+            element: <Signup/>
+           },
+           {
+            path: "/auth",
+            element: <Login/>
+           },
+
+        ]);
+
+        return element;
+    }
+      
+ 
+export default ProjectRoutes;
+
 
